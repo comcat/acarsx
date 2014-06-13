@@ -1,0 +1,115 @@
+
+
+       ACARSX
+
+
+1. Overview 
+===========
+
+acarsx is a free, realtime and accurate ACARS demodulator for embeded linux.
+It can be run in a 3G router (TP-LINK W703n, TLMR13U...) as a daemon to
+supply net service.
+
+This tool is based on the project of acarsdec 2.3 hosted in sourceforge.
+
+
+1.1 Features
+-------------
+
+ + Up to six channels decoded simultaneously
+ + Error detection AND correction
+ + Could send packet over UDP in planeplotter format
+
+
+1.2 Usage
+----------
+
+ acardx [-v] [-A] [-l logfile] -r rtl_dev_num f1 [f2 f...]
+
+  -v:				verbose
+  -d:				run as daemon
+  -A:				only display downlink message
+  -l logfile:		append log into the file
+  -n ip:port:		send acars message to ip:port via UDP
+  -r rtl_dev_num:	decode from rtl dongle number
+  -g gain:			set rtl preamp gain in tenth of db(-g 90 for +9db)
+  					use maximum gain by default
+  -p ppm:			set rlt ppm frequency correction
+
+
+
+1.3 Build
+----------
+
+It depends on 1 external library: librtlsdr.
+
+It is for software radio rtl dongle. The lib homepage:
+
+  http://sdr.osmocom.org/trac/wiki/rtl-sdr
+
+
+
+2. ACARS
+===========
+
+ACARS (Aircraft Communications Addressing and Report System) is a digital
+datalink system for transmission of short messages between aircraft and ground
+stations via airband radio (VHF/HF) or satellite (Iriduim/Inmarsat). The
+protocol was designed by ARINC (Aeronautical Radio, Incorporated) and deployed
+in 1978, using the Telex format.
+
+
+2.1 Specicication
+------------------
+
+The core specification documents of the ACARS:
+
+  o ARINC 618, AIR/GROUND CHARACTER-ORIENTED PROTOCOL SPECIFICATION
+  o ARINC 620, DATALINK GROUND SYSTEM AND INTERFACE SPECIFICATION
+  o ARINC 622, ATS Data Link Applications over ACARS Air-Ground Network
+  o ARINC 623, CHARACTER-ORIENTED AIR TRAFFIC SERVICE (ATS) APPLICATIONS
+
+
+2.2 VHF Frequency
+------------------
+
+118MHz - 136.975MHz, 25KHz Step, 760 channels
+
+  o 131.450MHz China(Including Hong Kong and Macau)
+  o 131.450MHz Japan, Mongolia, Australia
+  o 131.450MHz Southeast Asia(Thailand, Malaysia, Singapore, Philippines)
+  o 131.550MHz North America(Canada, United states, Mexico)
+  o 131.550MHz South America
+  o 131.550MHz Guam, Saipan
+  o 131.725MHz South Korea, Taiwan 
+  o 131.825MHz India
+  o 131.825MHz Europe and Middle East
+
+  o 131.475MHz Air Canada
+  o 136.850MHz SITA North American
+
+
+2.3 DSP 
+--------
+
+DSP, Data Service Provider:
+
+The DSP of china aviation is Aviation Data Communication Corporation(ADCC)
+
+  + ADCC:     VHF, 131.450MHz, China
+  + ARINC:    VHF/VDL Mode2/HF/Satellite, 131.550MHz, America
+  + SITA:     VHF/VDL Mode2/Satellite, 131.825MHz, Europe
+  + AEROTHAI: VHF, 131.450MHz, Thailand
+  + AVICOM:   VHF, 131.550MHz, Japan 
+  + GLOBALINK: ARINC + ADCC + AEROTHAI
+  
+
+
+
+
+
+
+
+
+
+
