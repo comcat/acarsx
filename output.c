@@ -132,35 +132,34 @@ void outnet(acarsmsg_t * msg)
 static void printmsg(acarsmsg_t * msg, int chn, time_t t)
 {
 	if (channel[chn].inmode == 3)
-		fprintf(fdout, "\n[#%1d (F:%3.3f L:%3d E:%1d) ", chn + 1,
+		fprintf(fdout, "\n[CH#%1d F:%3.3f L:%3d E:%1d   ", chn + 1,
 			channel[chn].Fr / 1000000.0, msg->lvl, msg->err);
 	else
-		fprintf(fdout, "\n[#%1d (E:%1d) ", chn + 1, msg->err);
+		fprintf(fdout, "\n[CH#%1d E:%1d   ", chn + 1, msg->err);
 
 	if (channel[chn].inmode != 2)
 		printtime(t);
 
-	fprintf(fdout, " --------------------------------\n");
-	fprintf(fdout, "ACARS MODE: %1c\t", msg->mode);
-	fprintf(fdout, "Aircraft REG: %s\n", msg->addr);
+	fprintf(fdout, " --- ]\n");
+	fprintf(fdout, "ACARS MODE:\t%1c\t", msg->mode);
+	fprintf(fdout, "Aircraft REG:\t%s\n", msg->addr);
 
-	fprintf(fdout, "MSG LABEL: %s\t", msg->label);
-	fprintf(fdout, "Block ID: %c\n", msg->bid);
+	fprintf(fdout, "MSG LABEL:\t%s\t", msg->label);
+	fprintf(fdout, "Block ID:\t%c\n", msg->bid);
 
-	fprintf(fdout, "ACK: %c\t\t", msg->ack);
+	fprintf(fdout, "Tech ACK:\t%c\n", msg->ack);
 
-	if (msg->no[0] != '\0') {
-		fprintf(fdout, "MSG NO.: %s\n", msg->no);
+	if (msg->no[0] != '\0' || msg->fid[0] != '\0') {
+		fprintf(fdout, "MSG NO.:\t%s\t", msg->no);
+		fprintf(fdout, "Flight ID:\t%s\n", msg->fid);
 	}
 
-	if (msg->fid[0] != '\0') {
-		fprintf(fdout, "Flight ID: %s\n", msg->fid);
+	if (strlen(msg->txt) != 0) {
+		fprintf(fdout, "MSG Body:\n%s\n", msg->txt);
 	}
-
-	fprintf(fdout, "Message:\n%s\n", msg->txt);
-
+ 
 	if (verbose && msg->be == 0x17)
-		fprintf(fdout, "Block End\n");
+		fprintf(fdout, "------- End Of Message -----\n");
 
 	fflush(fdout);
 }
