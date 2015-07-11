@@ -22,6 +22,7 @@
 #include <signal.h>
 #include <getopt.h>
 #include <sched.h>
+#include <unistd.h>
 #include "acarsx.h"
 
 channel_t channel[MAXNBCHANNELS];
@@ -60,6 +61,7 @@ static void usage(void)
 	fprintf(stderr,
 		" -g <gain>\tset rtl preamp gain in tenth of db (ie. -g 70 for +7db)\n");
 	fprintf(stderr, " -p <ppm>\tset rtl ppm frequency correction\n");
+	fprintf(stderr, " -d\t\trun as a daemon\n\n");
 	fprintf(stderr, " -h\t\tshow this help message\n\n");
 	fprintf(stderr,
 		"\nFor any input source, up to 4 channels could be simultanously decoded\n");
@@ -79,18 +81,19 @@ int main(int argc, char **argv)
 	int res, n;
 	struct sigaction sigact;
 
-	while ((c = getopt(argc, argv, "va:fro:g:Ahp:n:l:c:")) != EOF) {
+	while ((c = getopt(argc, argv, "vda:fro:g:Ahp:n:l:c:")) != EOF) {
 
 		switch (c) {
 		case 'v':
 			verbose = 1;
 			break;
+		case 'd':
+			daemon(0, 0);
+			break;
 		case 'o':
 			outtype = atoi(optarg);
 			break;
 		case 'r':
-
-			res = init_rtl(argv, optind);
 			inmode = 3;
 			break;
 		case 'g':
@@ -113,6 +116,10 @@ int main(int argc, char **argv)
 		default:
 			usage();
 		}
+	}
+
+	if (inmode == 3) {
+		res = init_rtl(argv, optind);
 	}
 
 	if (inmode == 0) {
