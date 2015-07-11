@@ -11,22 +11,22 @@
 #
 ### END INIT INFO
 ## Fill in name of program here.
-PROG="acarsx"
+PROG_PATH="/usr/local/bin"
+PROG="$PROG_PATH/acarsx"
 
 ACARS_LOG=acars-$(date -u +"%y%m").log
 
-PROG_ARGS="-l /var/log/${ACARS_LOG} -r 0 131.450"
+PROG_ARGS="-d -l /var/log/${ACARS_LOG} -r 0 131.450"
 PIDFILE="/var/run/acarsx.pid"
 
 start() {
       if [ -e $PIDFILE ]; then
           ## Program is running, exit with error.
           echo "Error! $PROG is currently running!" 1>&2
-          exit 1
       else
           ## Change from /dev/null to something like /var/log/$PROG if you want to save output.
-          #cd $PROG_PATH
-          $PROG $PROG_ARGS 2>&1 >/dev/null &
+          #$PROG $PROG_ARGS 2>&1 >/dev/null
+          start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE --exec $PROG -- $PROG_ARGS
           echo "$PROG started"
           touch $PIDFILE
       fi
@@ -35,13 +35,13 @@ start() {
 stop() {
       if [ -e $PIDFILE ]; then
          echo "$PROG is running"
+         #killall $PROG
+         start-stop-daemon --stop --quiet --oknodo --exec $PROG
          rm -f $PIDFILE
-         $(killall $PROG)
          echo "$PROG stopped"
       else
           ## Program is not running, exit with error.
           echo "Error! $PROG not started!" 1>&2
-          exit 1
       fi
 }
 
